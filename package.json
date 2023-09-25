@@ -1,0 +1,28 @@
+{
+  "name": "stackblitz-starters-enzh9b",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@hookform/resolvers": "^3.3.0",
+    "@mui/material": "5.14.6",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "7.45.4",
+    "react-router-dom": "6.15.0",
+    "ts-extras": "^0.11.0",
+    "zod": "3.19.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-scripts": "latest"
+  }
+}
