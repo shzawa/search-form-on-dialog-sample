@@ -1,42 +1,53 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Condition } from './schema';
-import SearchConditionSettingsDialogWithButton from './SearchConditionSettingsDialogWithButton';
+import debounce from 'lodash/debounce';
+import { SearchConditions, useFetchHogeList } from './useFetchHogeList';
 
 export default function Page() {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const handleSubmit = useCallback(
-    (values: Condition) => {
-      const newSearchParams = new URLSearchParams();
-      if (values.title) {
-        newSearchParams.set('title', values.title);
-      }
-      if (values.isPublic) {
-        newSearchParams.set('is_public', values.isPublic.toString());
-      }
-      if (values.isPrivate) {
-        newSearchParams.set('is_private', values.isPrivate.toString());
-      }
-      setSearchParams(newSearchParams, { replace: true });
-    },
+  const [searchTitleValue, setSearchTitleValue] = useState(
+    searchParams.get('title') ?? ''
+  );
+  const updateSearchParamTitle = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearchParams(
+          (searchParams) => {
+            if (value.length) {
+              searchParams.set('title', value);
+            } else {
+              searchParams.delete('title');
+            }
+            return searchParams;
+          },
+          { replace: true }
+        );
+      }, 300),
     [setSearchParams]
   );
-
-  const formValues = useMemo<Condition>(() => {
+  const handleChangeInput = useCallback(
+    (value: string) => {
+      updateSearchParamTitle(value);
+      setSearchTitleValue(value);
+    },
+    [updateSearchParamTitle]
+  );
+  const searchConditions = useMemo<SearchConditions>(() => {
+    const title = searchParams.get('title');
     return {
-      title: searchParams.get('title') || '',
-      isPublic: searchParams.get('is_public') === 'true',
-      isPrivate: searchParams.get('is_private') === 'true',
+      ...(typeof title === 'string' && title.trim().length && { title }),
     };
   }, [searchParams]);
+  const hogeList = useFetchHogeList(searchConditions);
 
   return (
     <div>
-      <SearchConditionSettingsDialogWithButton
-        values={formValues}
-        onSubmit={handleSubmit}
+      <input
+        type="text"
+        value={searchTitleValue}
+        onChange={(e) => handleChangeInput(e.target.value)}
       />
+      <pre>{JSON.stringify(hogeList)}</pre>
     </div>
   );
 }
