@@ -47,7 +47,11 @@ export default function Page() {
         value={searchTitleValue}
         onChange={(e) => handleChangeInput(e.target.value)}
       />
-      <pre>{JSON.stringify(hogeList)}</pre>
+      {searchTitleValue === '' ? (
+        <p>テキストボックスを入力してください！</p>
+      ) : (
+        <pre>{JSON.stringify(hogeList)}</pre>
+      )}
     </div>
   );
 }

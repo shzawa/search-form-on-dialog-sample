@@ -18,19 +18,6 @@ export const useFetchHogeList = (searchConditions: SearchConditions) => {
     };
   }, [isSearching, searchConditions]);
 
-  useEffect(() => {
-    if (isSearching) return;
-    let ignore = false;
-    fetchListApi()
-      .then((res) => res.json())
-      .then((data) => {
-        if (!ignore) setData(data);
-      });
-    return () => {
-      ignore = true;
-    };
-  }, [isSearching]);
-
   return data;
 };
 
@@ -44,20 +31,6 @@ function fetchSearchApi(params: object) {
         ok: true,
         json: () =>
           Promise.resolve({ message: '検索結果を取得しました', ...params }),
-      });
-    }, 1000);
-  });
-}
-
-function fetchListApi() {
-  return new Promise<{
-    ok: boolean;
-    json: () => Promise<{ message: string }>;
-  }>((resolve) => {
-    setTimeout(() => {
-      resolve({
-        ok: true,
-        json: () => Promise.resolve({ message: '一覧を取得しました' }),
       });
     }, 1000);
   });
