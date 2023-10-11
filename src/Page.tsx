@@ -8,21 +8,20 @@ export default function Page() {
   const [searchTitleValue, setSearchTitleValue] = useState(
     searchParams.get('title') ?? ''
   );
-  const updateSearchParamTitle = useMemo(
-    () =>
-      debounce((value: string) => {
-        setSearchParams(
-          (searchParams) => {
-            if (value.length) {
-              searchParams.set('title', value);
-            } else {
-              searchParams.delete('title');
-            }
-            return searchParams;
-          },
-          { replace: true }
-        );
-      }, 300),
+  const updateSearchParamTitle = useCallback(
+    debounce((value: string) => {
+      setSearchParams(
+        (searchParams) => {
+          if (value.length) {
+            searchParams.set('title', value);
+          } else {
+            searchParams.delete('title');
+          }
+          return searchParams;
+        },
+        { replace: true }
+      );
+    }, 300),
     [setSearchParams]
   );
   const handleChangeInput = useCallback(
